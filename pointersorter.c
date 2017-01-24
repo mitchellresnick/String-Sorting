@@ -17,22 +17,22 @@
  */
 char* getNextToken (char* inputString, int* analChar){
         //first we have to strip any non-alpha character from the begining of the token
-        while(isalpha(*inputString) == 0){
-          // printf("inputString: %c\n", inputString[]);
-          //check for a null byte
-          if (*inputString == '\0') {
-                  return NULL;
-          }
-          (*analChar)++;
-          inputString++;
+        while(isalpha(*inputString) == 0) {
+                // printf("inputString: %c\n", inputString[]);
+                //check for a null byte
+                if (*inputString == '\0') {
+                        return NULL;
+                }
+                (*analChar)++;
+                inputString++;
         }
 
         //get the size of the token
         int tokenSize = 0;
         while(isalpha(inputString[tokenSize]) != 0) {
-          if (inputString[tokenSize] == '\0') {
-                  return NULL;
-          }
+                if (inputString[tokenSize] == '\0') {
+                        return NULL;
+                }
                 tokenSize++;
                 (*analChar)++;
         }
@@ -92,27 +92,27 @@ int stringComp(char * str1, char * str2){
 }
 
 int main(int argc, char ** argv){
-    if(argc != 2){
-      fprintf(stderr, "ERROR: Impoper number of arguments.\n");
-      exit(1);
-    }
+        if(argc != 2) {
+                fprintf(stderr, "ERROR: Impoper number of arguments.\n");
+                exit(1);
+        }
 
-    int skip = 0;
-    char * tknStrm = argv[1];
-    char * tkn = getNextToken(tknStrm, &skip);
-    tknStrm += skip;
+        int skip = 0;
+        char * tknStrm = argv[1];
+        char * tkn = getNextToken(tknStrm, &skip);
+        tknStrm += skip;
 
 
-    if(tkn == NULL){
-      printf("No token was found.\n");
-      exit(1);
-    }
-    while(tkn != NULL){
-      printf("token: %s\n", tkn);
-      skip = 0;
-      tkn = getNextToken(tknStrm, &skip);
-      tknStrm += skip;
-    }
+        if(tkn == NULL) {
+                fprintf(stderr, "No token was found.\n");
+                exit(1);
+        }
+        while(tkn != NULL) {
+                printf("token: %s\n", tkn);
+                skip = 0;
+                tkn = getNextToken(tknStrm, &skip);
+                tknStrm += skip;
+        }
 
-    return 0;
+        return 0;
 }
