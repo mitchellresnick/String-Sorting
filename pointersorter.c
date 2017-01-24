@@ -3,6 +3,52 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+/*
+ * Function: getNextToken
+ * --------------------
+ * starts at the given index and gives the next consecutive group of letters
+ * and increments the inputPosition pointer accordingly.
+ *
+ *  inputString: pointer to the inputString(probably argv[1])
+ *  analChar: the number of analyzed characters. Used for pointer arithmatic on
+ *            inputString after the function completes.
+ *
+ *  returns: the next token
+ */
+char* getNextToken (char* inputString, int* analChar){
+        //first we have to strip any non-alpha character from the begining of the token
+        int i;
+        while(isalpha(*inputString) == 0){
+          // printf("inputString: %c\n", inputString[]);
+           //check for a null byte
+          if (*inputString == '\0') {
+                  return NULL;
+          }
+          *analChar++;
+          inputString++;
+        }
+
+
+        //get the size of the token
+        int tokenSize = 0;
+        while(isalpha(inputString[tokenSize]) != 0) {
+          if (inputString[tokenSize] == '\0') {
+                  return NULL;
+          }
+                tokenSize++;
+                *analChar++;
+        }
+        printf("Size of token: %i\n", tokenSize);
+
+        //create ypur return char*
+        char* returnToken = malloc((tokenSize+1)*sizeof(char));
+        returnToken[tokenSize] = '\0';
+        //copy n characters of the inputString where n is tokenSize
+        strncpy(returnToken, inputString, (size_t)tokenSize);
+        printf("returnToken: %s\n", returnToken);
+        return returnToken;
+}
+
 /*Given two strings consiting of only characters, stringComp compares them
  * character by character and returns the following:
  * 1 if str1 < str2 - str1 comes before str2
@@ -19,7 +65,6 @@ int stringComp(char * str1, char * str2){
 
                 if(*str2 == '\0')
                         return 2; //Identical, except str1 is longer
-
                 //Compare the two current characters
                 if(isupper(*str1)) { //str1 is upper case
                         char s1 = *str1 + 32; //effectively makes it lowercase
@@ -31,11 +76,9 @@ int stringComp(char * str1, char * str2){
                                         return 1;
                                 if(s1 > s2)
                                         return 2;
-
                         } else { //Just str1 is upper case
                                 return (s1 <= *str2) ? 1 : 2;
                         }
-
                 } else if(isupper(*str2)) {//str2 is upper but str1 is not
                         return (*str2 + 32 <= *str1) ? 2 : 1;
 
@@ -52,17 +95,10 @@ int stringComp(char * str1, char * str2){
 }
 
 int main(int argc, char ** argv){
-        if(argc != 3)
-                return -1;
-        char * str1 = argv[1];
-        char * str2 = argv[2];
-
-        int x = stringComp(str1,str2);
-
-        if(x == 2)
-                printf("%s\n%s\n", str2, str1);
-        else
-                printf("%s\n%s\n", str1, str2);
-
+    int* analChar;
+    getNextToken(argv[1], analChar);
+    // *analChar = 0;
+    // char* token = getNextToken(argv[1], analChar);
+    // printf("token: %s\n", token);
         return 0;
 }
