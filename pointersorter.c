@@ -3,11 +3,11 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-//Given two strings consiting of only characters, stringComp compares them
-//character by character and returns the following:
-// 1 if str1 < str2 - str1 comes before str2
-// 0 if str1 = str2 - str1 is the same as str2
-// 2 if str1 > str2 - str1 comes after str2
+/*Given two strings consiting of only characters, stringComp compares them
+ * character by character and returns the following:
+ * 1 if str1 < str2 - str1 comes before str2
+ * 0 if str1 = str2 - str1 is the same as str2
+ * 2 if str1 > str2 - str1 comes after str2 */
 int stringComp(char * str1, char * str2){
         while(1 == 1) {
                 //End method if one or both are done
