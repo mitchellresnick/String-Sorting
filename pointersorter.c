@@ -19,14 +19,13 @@ char* getNextToken (char* inputString, int* analChar){
         //first we have to strip any non-alpha character from the begining of the token
         while(isalpha(*inputString) == 0){
           // printf("inputString: %c\n", inputString[]);
-           //check for a null byte
+          //check for a null byte
           if (*inputString == '\0') {
                   return NULL;
           }
           (*analChar)++;
           inputString++;
         }
-
 
         //get the size of the token
         int tokenSize = 0;
@@ -37,14 +36,13 @@ char* getNextToken (char* inputString, int* analChar){
                 tokenSize++;
                 (*analChar)++;
         }
-        //printf("Size of token: %i\n", tokenSize);
 
         //create your return char*
         char* returnToken = malloc((tokenSize+1)*sizeof(char));
         returnToken[tokenSize] = '\0';
+
         //copy n characters of the inputString where n is tokenSize
         strncpy(returnToken, inputString, (size_t)tokenSize);
-        //printf("returnToken: %s\n", returnToken);
         return returnToken;
 }
 
@@ -94,15 +92,27 @@ int stringComp(char * str1, char * str2){
 }
 
 int main(int argc, char ** argv){
+    if(argc != 2){
+      fprintf(stderr, "ERROR: Impoper number of arguments.\n");
+      exit(1);
+    }
+
     int skip = 0;
     char * tknStrm = argv[1];
     char * tkn = getNextToken(tknStrm, &skip);
     tknStrm += skip;
 
-    printf("token: %s\nnext char: %c\n", tkn, *tknStrm);
 
-    // *analChar = 0;
-    // char* token = getNextToken(argv[1], analChar);
-    // printf("token: %s\n", token);
-        return 0;
+    if(tkn == NULL){
+      printf("No token was found.\n");
+      exit(1);
+    }
+    while(tkn != NULL){
+      printf("token: %s\n", tkn);
+      skip = 0;
+      tkn = getNextToken(tknStrm, &skip);
+      tknStrm += skip;
+    }
+
+    return 0;
 }
