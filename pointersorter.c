@@ -51,7 +51,6 @@ int stringComp(char * str1, char * str2){
         }
 }
 
-//test comment
 int main(int argc, char ** argv){
         if(argc != 3)
                 return -1;
