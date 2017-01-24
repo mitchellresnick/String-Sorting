@@ -17,14 +17,13 @@
  */
 char* getNextToken (char* inputString, int* analChar){
         //first we have to strip any non-alpha character from the begining of the token
-        int i;
         while(isalpha(*inputString) == 0){
           // printf("inputString: %c\n", inputString[]);
            //check for a null byte
           if (*inputString == '\0') {
                   return NULL;
           }
-          *analChar++;
+          (*analChar)++;
           inputString++;
         }
 
@@ -36,16 +35,16 @@ char* getNextToken (char* inputString, int* analChar){
                   return NULL;
           }
                 tokenSize++;
-                *analChar++;
+                (*analChar)++;
         }
-        printf("Size of token: %i\n", tokenSize);
+        //printf("Size of token: %i\n", tokenSize);
 
-        //create ypur return char*
+        //create your return char*
         char* returnToken = malloc((tokenSize+1)*sizeof(char));
         returnToken[tokenSize] = '\0';
         //copy n characters of the inputString where n is tokenSize
         strncpy(returnToken, inputString, (size_t)tokenSize);
-        printf("returnToken: %s\n", returnToken);
+        //printf("returnToken: %s\n", returnToken);
         return returnToken;
 }
 
@@ -95,8 +94,13 @@ int stringComp(char * str1, char * str2){
 }
 
 int main(int argc, char ** argv){
-    int* analChar;
-    getNextToken(argv[1], analChar);
+    int skip = 0;
+    char * tknStrm = argv[1];
+    char * tkn = getNextToken(tknStrm, &skip);
+    tknStrm += skip;
+
+    printf("token: %s\nnext char: %c\n", tkn, *tknStrm);
+
     // *analChar = 0;
     // char* token = getNextToken(argv[1], analChar);
     // printf("token: %s\n", token);
