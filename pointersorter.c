@@ -98,43 +98,43 @@ int main(int argc, char ** argv){
         }
 
         char ** tokens = malloc(10*sizeof(char*)); //Stores an array of strings
-        if(tokens == NULL){ //Checks for failure
-          fprintf(stderr, "ERROR: Malloc failure.\n");
-          exit(1);
+        if(tokens == NULL) { //Checks for failure
+                fprintf(stderr, "ERROR: Malloc failure.\n");
+                exit(1);
         }
 
-        int tokNum = 0; //Keeps track of the number of tokens in char ** tokens
+        int tokenNumber = 0; //Keeps track of the number of tokens in char ** tokens
         int skip = 0; //Tells original sting where to begin looking for next token
-        char * tknStrm = argv[1]; //Creates new pointer to parse argv[1]
+        char * tokenStream = argv[1]; //Creates new pointer to parse argv[1]
 
-        tokens[0] = getNextToken(tknStrm, &skip); //Places first token in first pos
+        tokens[0] = getNextToken(tokenStream, &skip); //Places first token in first pos
         if(*tokens == NULL) { //throw error if no token was found
                 fprintf(stderr, "ERROR: No token was found.\n");
                 exit(1);
         }
-        tknStrm += skip; //Skips characters already parsed
+        tokenStream += skip; //Skips characters already parsed
 
-        while(tokens[tokNum] != NULL) { //While a token was found
-                tokNum++; //Count the previous token (this is also the potential
-                          // position of the next token)
+        while(tokens[tokenNumber] != NULL) { //While a token was found
+                tokenNumber++; //Count the previous token (this is also the potential
+                // position of the next token)
 
-                if(tokNum % 10 == 0){ //If the current 10 char*s are used, malloc 10 more
-                  if(realloc(tokens, (tokNum + 10)*sizeof(char*)) == NULL){ //Error check
-                    fprintf(stderr, "ERROR: Realloc failure.\n");
-                    exit(1);
-                  }
+                if(tokenNumber % 10 == 0) { //If the current 10 char*s are used, malloc 10 more
+                        if(realloc(tokens, (tokenNumber + 10)*sizeof(char*)) == NULL) { //Error check
+                                fprintf(stderr, "ERROR: Realloc failure.\n");
+                                exit(1);
+                        }
                 }
 
                 skip = 0; //Reset skip
-                tokens[tokNum] = getNextToken(tknStrm, &skip); //Potential next token
-                tknStrm += skip; //Skips characters already parsed
+                tokens[tokenNumber] = getNextToken(tokenStream, &skip); //Potential next token
+                tokenStream += skip; //Skips characters already parsed
         }
 
         //Print and then free each token
         int i = 0;
-        for(; i < tokNum; i++){
-          printf("Token: %s\n", tokens[i]);
-          free(tokens[i]);
+        for(; i < tokenNumber; i++) {
+                printf("Token: %s\n", tokens[i]);
+                free(tokens[i]);
         }
         free(tokens); //Free the pointer array once done
 
