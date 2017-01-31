@@ -10,7 +10,7 @@
  * and increments the inputPosition pointer accordingly.
  *
  *  inputString: pointer to the inputString(probably argv[1])
- *  analChar: the number of analyzed characters. Used for pointer arithmatic on
+ *  analChar: the number of analyzed characters. Used for pointer arithmetic on
  *            inputString after the function completes.
  *
  *  returns: the next token
@@ -137,29 +137,74 @@ typedef struct node {
  * creates a node that can be used in a linked list
  *
  * token: the token that is to be placed
- * storage: the array that stores the tokens in a sorted order
- * tokensStored: the number of tokens in storage
  *
  *
  *  returns: pointer to the node
  */
- node_t * createNode(char* token){
-   node_t * newNode = malloc(strlen(token) + sizeof(node_t*)); //allocates too much space, need to fix second sizeof
-   newNode->token = token;
-   newNode->next = NULL;
-  //  printf("node token: %s\n", newNode->token);
-  //  printf("node next: %p\n", newNode->next);
-  //  printf("strlen(token): %i\n", (int)strlen(token));
-  //  printf("sizeof(node_t): %i\n", (int)sizeof(node_t*));
-  //  printf("Size of total node: %i\n", (int)(strlen(token) + sizeof(node_t*)));
+node_t * createNode(char* token){
+        node_t * newNode = malloc(sizeof(node_t)); //allocates too much space, need to fix second sizeof
+        //  printf("node token: %s\n", newNode->token);
+        //  printf("node next: %p\n", newNode->next);
+        //  printf("strlen(token): %i\n", (int)strlen(token));
+        //  printf("sizeof(node_t): %i\n", (int)sizeof(node_t*));
+        //  printf("Size of total node: %i\n", (int)(strlen(token) + sizeof(node_t*)));
 
-   if (newNode == NULL){
-     fprintf(stderr, "Malloc failed.\n");
-   } else {
-    //  printf("Node malloc successful. Pointer to: %p\n", newNode);  //%p is a formatter for a memory address
-   }
-   return newNode;
- }
+        if (newNode == NULL) {
+                fprintf(stderr, "Malloc failed.\n");
+        } //else {
+          //printf("Made Node %s\n", newNode->token);  //%p is a formatter for a memory address
+          //}
+
+        (*newNode).next = NULL;
+        (*newNode).token = token;
+
+        return newNode;
+}
+
+/*
+ * Function: placeNode
+ * --------------------
+ * places the node in teh linked list
+ *
+ * node: the node to be placed in the LL
+ * linkedList: pointer to the head of the list
+ *
+ *  returns: pointer to the node
+ */
+node_t* placeNode (node_t* ins, node_t* front){
+        if(front == NULL)
+                return ins;
+
+        if(stringComp((*ins).token,(*front).token) != 2) {
+                (*ins).next = front;
+                return ins;
+        }
+
+        node_t * ptr = (*front).next;
+        node_t * prv = front;
+
+        while(ptr != NULL) {
+                if(stringComp((*ins).token,(*ptr).token) != 2) {
+                        (*ins).next = ptr;
+                        (*prv).next = ins;
+
+                        return front;
+                }
+                prv = ptr;
+                ptr = (*ptr).next;
+        }
+
+        (*prv).next = ins;
+        return front;
+}
+
+void printLL(node_t* ll){ //WORKS
+        node_t* temp = ll;
+        while (temp != NULL) {
+                printf("Node: %s, ", temp->token);
+                temp = temp->next;
+        }
+}
 
 int main(int argc, char ** argv){
         if(argc != 2) {
@@ -167,47 +212,31 @@ int main(int argc, char ** argv){
                 exit(1);
         }
 
-        char ** tokens = malloc(10*sizeof(char*)); //Stores an array of strings
-        if(tokens == NULL) { //Checks for failure
-                fprintf(stderr, "ERROR: Malloc failure.\n");
+        int skip = 0;
+        char * tokenStream = argv[1];
+
+        char * token = getNextToken(tokenStream, &skip);
+        tokenStream += skip;
+
+        if(token == NULL) {
+                fprintf(stderr, "ERROR: No valid token in stream.");
                 exit(1);
         }
 
-        int tokenNumber = 0; //Keeps track of the number of tokens in char ** tokens
-        int skip = 0; //Tells original sting where to begin looking for next token
-        char * tokenStream = argv[1]; //Creates new pointer to parse argv[1]
+        node_t * front = placeNode(createNode(token), NULL);
 
-        tokens[0] = getNextToken(tokenStream, &skip); //Places first token in first pos
-        if(*tokens == NULL) { //throw error if no token was found
-                fprintf(stderr, "ERROR: No token was found.\n");
-                exit(1);
-        }
-        tokenStream += skip; //Skips characters already parsed
+        while(token != NULL) {
+                skip = 0;
+                token = getNextToken(tokenStream, &skip);
+                tokenStream += skip;
 
-        while(tokens[tokenNumber] != NULL) { //While a token was found
-                tokenNumber++; //Count the previous token (this is also the potential
-                // position of the next token)
+                printf("Token: %s\n", token);
 
-                if(tokenNumber % 10 == 0) { //If the current 10 char*s are used, malloc 10 more
-                        if(realloc(tokens, (tokenNumber + 10)*sizeof(char*)) == NULL) { //Error check
-                                fprintf(stderr, "ERROR: Realloc failure.\n");
-                                exit(1);
-                        }
-                }
+                if(token != NULL)
+                        front = placeNode(createNode(token), front);
 
-                skip = 0; //Reset skip
-                tokens[tokenNumber] = getNextToken(tokenStream, &skip); //Potential next token
-                tokenStream += skip; //Skips characters already parsed
         }
 
-        //Print and then free each token
-        int i;
-        for(i=0; i < tokenNumber; i++) {
-                printf("Token: %s\n", tokens[i]);
-                printf("createNode returns: %p\n", createNode(tokens[i]));
-                free(tokens[i]);
-        }
-        free(tokens); //Free the pointer array once done
-
+        printLL(front);
         return 0;
 }
