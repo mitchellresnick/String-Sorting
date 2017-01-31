@@ -4,6 +4,19 @@
 #include <ctype.h>
 
 /*
+ * Struct: Node
+ * --------------------
+ * Single node of a linked list
+ *
+ * token: the token to be stored in the node
+ * next: the link (or pointer) to the next node
+ */
+typedef struct node {
+        char* token;
+        struct node * next;
+} node_t;
+
+/*
  * Function: getNextToken
  * --------------------
  * starts at the given index and gives the next consecutive group of letters
@@ -74,10 +87,10 @@ int stringComp(char * str1, char * str2){
                                 if(s1 > s2)
                                         return 2;
                         } else { //Just str1 is upper case
-                                return (s1 <= *str2) ? 1 : 2;
+                                return 1;
                         }
                 } else if(isupper(*str2)) {//str2 is upper but str1 is not
-                        return (*str2 + 32 <= *str1) ? 2 : 1;
+                        return 2;
 
                 } else { //both are lower case
                         if(*str1 < *str2)
@@ -92,46 +105,6 @@ int stringComp(char * str1, char * str2){
 }
 
 /*
- * Function: placeToken
- * --------------------
- * places the token into the array using insertion sort
- *
- * token: the token that is to be placed
- * storage: the array that stores the tokens in a sorted order
- * tokensStored: the number of tokens in storage
- *
- *
- *  returns: 0 on success, -1 on failure
- */
-// int placeToken(char* token, char** storage, int tokensStored){
-//         //if the storage is empty, just place the token
-//         if (tokensStored == 0) {
-//                 storage[0] = token;
-//         }
-//
-//         //run along the storage to find the first string it is less than
-//         int target = 0;
-//         int compare =
-//                 while () {
-//                 //if the token goes in the last position
-//         }
-//         return 0;
-// }
-
-/*
- * Struct: Node
- * --------------------
- * Single node of a linked list
- *
- * token: the token to be stored in the node
- * next: the link (or pointer) to the next node
- */
-typedef struct node {
-        char* token;
-        struct node * next;
-} node_t;
-
-/*
  * Function: createNode
  * --------------------
  * creates a node that can be used in a linked list
@@ -143,17 +116,10 @@ typedef struct node {
  */
 node_t * createNode(char* token){
         node_t * newNode = malloc(sizeof(node_t)); //allocates too much space, need to fix second sizeof
-        //  printf("node token: %s\n", newNode->token);
-        //  printf("node next: %p\n", newNode->next);
-        //  printf("strlen(token): %i\n", (int)strlen(token));
-        //  printf("sizeof(node_t): %i\n", (int)sizeof(node_t*));
-        //  printf("Size of total node: %i\n", (int)(strlen(token) + sizeof(node_t*)));
 
         if (newNode == NULL) {
                 fprintf(stderr, "Malloc failed.\n");
-        } //else {
-          //printf("Made Node %s\n", newNode->token);  //%p is a formatter for a memory address
-          //}
+        }
 
         (*newNode).next = NULL;
         (*newNode).token = token;
@@ -201,9 +167,19 @@ node_t* placeNode (node_t* ins, node_t* front){
 void printLL(node_t* ll){ //WORKS
         node_t* temp = ll;
         while (temp != NULL) {
-                printf("Node: %s, ", temp->token);
+                printf("%s\n", temp->token);
                 temp = temp->next;
         }
+}
+
+void freeLL(node_t * front){
+  node_t * temp;
+  while(front != NULL){
+    free((*front).token);
+    temp = front;
+    front = (*front).next;
+    free(temp);
+  }
 }
 
 int main(int argc, char ** argv){
@@ -219,7 +195,7 @@ int main(int argc, char ** argv){
         tokenStream += skip;
 
         if(token == NULL) {
-                fprintf(stderr, "ERROR: No valid token in stream.");
+                fprintf(stderr, "ERROR: No valid token in stream.\n");
                 exit(1);
         }
 
@@ -230,13 +206,13 @@ int main(int argc, char ** argv){
                 token = getNextToken(tokenStream, &skip);
                 tokenStream += skip;
 
-                printf("Token: %s\n", token);
-
                 if(token != NULL)
                         front = placeNode(createNode(token), front);
-
         }
 
         printLL(front);
+
+        freeLL(front);
+
         return 0;
 }
