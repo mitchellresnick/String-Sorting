@@ -1,0 +1,11 @@
+Test case: "" | Status: Passed
+Test case: "" test| Status: Passed
+Test case: " " | Status: Passed
+Test case: "123" | Status: Passed
+Test case: "abc" | Status: Passed
+Test case: "abc def" | Status: Passed
+Test case: "def abc" | Status: Passed
+Test case: "a1b2c3d4e f g h i j k l m n o p4q4r4s4t4u4v4w4x4y*z" | Status: Passed
+Test case: "superlongstringseperatedbysomedelimiters superlongstringseperatedbysomedelimiters superlongstringseperatedbysomedelimiters  superlongstringseperatedbysomedelimiters superlongstringseperatedbysomedelimiters  superlongstringseperatedbysomedelimiters superlongstringseperatedbysomedelimiters superlongstringseperatedbysomedelimiters superlongstringseperatedbysomedelimiters superlongstringseperatedbysomedelimiters superlongstringseperatedbysomedelimiters superlongstringseperatedbysomedelimiters superlongstringseperatedbysomedelimiterssuperlongstringseperatedbysomedelimiterssuperlongstringseperatedbysomedelimiterssuperlongstringseperatedbysomedelimiters superlongstringseperatedbysomedelimiters" | Status: Passed
+Test case: "abc1234" | Status: Passed
+Test case: "1234abc" | Status: Passed
